@@ -78,7 +78,7 @@ def display_song(cover, title1, title2, title3):
 
 	row = add_line(t1, 0, h, font, inky_display, draw, max)
 	row = add_line(t2, row, h, font, inky_display, draw, max)
-	row = add_line(t3, row, h, font, inky_display, draw, max)
+	row = add_line(t3, row, h, font, inky_display, draw, 10)
 
 	inky_display.set_image(img)
 	inky_display.show()

@@ -6,7 +6,12 @@ from PIL import Image, ImageFont, ImageDraw
 import sys
 import re
 
+SPACEFACTOR = 0.35
+LINEFACTOR = 0.75
+
 def split_string(text, font, inky_display):
+	if text == '':
+		return []
 	a = ['']
 	aidx = 0
 	split = text.split()
@@ -24,31 +29,27 @@ def split_string(text, font, inky_display):
 			a[aidx] = a[aidx] + ' ' + word
 		else:
 			aidx = aidx + 1
-			if aidx >= 3:
-				break
 			a.append('')
 			i = i - 1
 		i = i + 1
 	return a
 
-def add_line(text, row, h, font, inky_display, draw):
+def add_line(text, y, h, font, inky_display, draw, max=3):
+	space = h*SPACEFACTOR
+	if text == []:
+		return y
 	x = inky_display.WIDTH / 2
 
-	y = (row) * (inky_display.HEIGHT / 8) - (h / 2)
-	draw.text((x, y), text[0], inky_display.RED, font)
-	if len(text) == 1 or row == 7: return row+1
-
-	y = (row+1) * (inky_display.HEIGHT / 8) - (h / 2)
-	draw.text((x, y), text[1], inky_display.RED, font)
-	if len(text) == 2 or row == 6: return row+2
-
-	y = (row+2) * (inky_display.HEIGHT / 8) - (h / 2)
-	draw.text((x, y), text[2], inky_display.RED, font)
-	return row+3
+	for i in range(max):
+		if y+(h*LINEFACTOR) >= inky_display.HEIGHT:
+			return y + space
+		draw.text((x, y), text[i], inky_display.RED, font)
+		y = y+(h*LINEFACTOR)
+		if len(text) == 1+i:
+			break
+	return y + space
 
 def display_song(cover, title1, title2, title3):
-
-	#print('to display', title1, title2, title3)
 	inky_display = auto()
 	inky_display.set_border(inky_display.WHITE)
 	inky_display.h_flip = True
@@ -64,19 +65,20 @@ def display_song(cover, title1, title2, title3):
 		font = ImageFont.truetype(SourceSansPro, 14)
 
 	t1 = split_string(title1, font, inky_display)
-	print(t1)
-
 	t2 = split_string(title2, font, inky_display)
-	print(t2)
-
 	t3 = split_string(title3, font, inky_display)
-	print(t3)
+
+	print(t1, t2, t3)
 
 	w, h = font.getsize(title1+title2+title3)
 
-	row = add_line(t1, 1, h, font, inky_display, draw)
-	row = add_line(t2, row + 1, h, font, inky_display, draw)
-	row = add_line(t3, row + 1, h, font, inky_display, draw)
+	max = 3
+	if (len(t1)+len(t2)+len(t3))*(h*LINEFACTOR)+2*(h*SPACEFACTOR) <= inky_display.HEIGHT:
+		max = 10
+
+	row = add_line(t1, 0, h, font, inky_display, draw, max)
+	row = add_line(t2, row, h, font, inky_display, draw, max)
+	row = add_line(t3, row, h, font, inky_display, draw, max)
 
 	inky_display.set_image(img)
 	inky_display.show()

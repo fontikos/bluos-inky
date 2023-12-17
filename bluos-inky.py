@@ -52,6 +52,7 @@ while True:
 
 		song['state'] = root.find('state').text
 		song['secs'] = int(root.find('secs').text)
+		song['service'] = root.find('serviceName').text
 		song['image'] = root.find('image').text
 	except AttributeError:
 		#print(r.text)
@@ -60,9 +61,11 @@ while True:
 	with open('state', 'w') as f:
 		f.write(song['state'] + '\n')
 
-	#if (song['secs'] <= 30 and song['state'] == 'play') or (song['state'] == 'stream'):
 	if song['state'] in ['play', 'stream']:
 		print(song)
+
+		if song['service'] == 'TuneIn':
+			song['title1'] = ''
 
 		if song['image'].startswith('http'):
 			url = song['image']

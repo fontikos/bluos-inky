@@ -17,6 +17,7 @@ BLUOS_STATUS_URL = 'http://%s:%d/Status' % (myconfig.BLUOS_IP, myconfig.BLUOS_PO
 song = {}
 song['etag'] = ''
 song['timeout'] = 300
+old = ''
 
 while True:
 	try:
@@ -41,12 +42,15 @@ while True:
 		if ',' in song['title2']:
 			song['title2'] = song['title2'].split(',')[0]
 
+		if song['title1'] == None: song['title1'] = ''
 		song['title1'] = re.sub(r'\(.*?Remaster.*?\)','', song['title1'])
 		song['title1'] = song['title1'].strip()
 
+		if song['title2'] == None: song['title2'] = ''
 		song['title2'] = re.sub(r'\(.*?Remaster.*?\)','', song['title2'])
 		song['title2'] = song['title2'].strip()
 
+		if song['title3'] == None: song['title3'] = ''
 		song['title3'] = re.sub(r'\(.*?Remaster.*?\)','', song['title3'])
 		song['title3'] = song['title3'].strip()
 
@@ -81,6 +85,7 @@ while True:
 		else:
 			print('Image could not be retrieved: $s' % url)
 
-		inkyimg.display_song('converted.png', song['title1'], song['title2'], song['title3'])
-		time.sleep(30)
-
+		if url + song['title1'] + song['title2'] + song['title3'] != old:
+			old = url + song['title1'] + song['title2'] + song['title3']
+			inkyimg.display_song('converted.png', song['title1'], song['title2'], song['title3'])
+			time.sleep(10)

@@ -22,7 +22,7 @@ def split_string(text, font, inky_display):
 			j=len(word)
 			while font.getsize(word[:j-1] + '.')[0] > inky_display.WIDTH / 2:
 				j = j - 1
-			a[aidx] = a[aidx] + word[:j] + '.'
+			a[aidx] = a[aidx] + word[:j-1] + '.'
 		elif a[aidx] == '' and font.getsize(a[aidx] + word)[0] <= inky_display.WIDTH / 2:
 			a[aidx] = a[aidx] + word
 		elif a[aidx] != '' and font.getsize(a[aidx] + ' ' + word)[0] <= inky_display.WIDTH / 2:

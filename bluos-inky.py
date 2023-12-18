@@ -39,14 +39,19 @@ while True:
 		continue
 	#print(r.text)
 	root=et.fromstring(r.text)
-
 	try:
 		song['etag'] = root.attrib['etag']
 		song['service'] = root.find('service').text
 
-		song['title1'] = root.find('title1').text
-		song['title2'] = root.find('title2').text
-		song['title3'] = root.find('title3').text
+		song['title1'] = ''
+		if root.find('title1') != None:
+			song['title1'] = root.find('title1').text
+		song['title2'] = ''
+		if root.find('title2') != None:
+			song['title2'] = root.find('title2').text
+		song['title3'] = ''
+		if root.find('title3') != None:
+			song['title3'] = root.find('title3').text
 
 		#if ',' in song['title2']:
 		#	song['title2'] = song['title2'].split(',')[0]
@@ -57,9 +62,12 @@ while True:
 
 		song['state'] = root.find('state').text
 		song['secs'] = int(root.find('secs').text)
-		song['service'] = root.find('serviceName').text
+		song['serviceName'] = song['service']
+		if root.find('serviceName') != None:
+			song['serviceName'] = root.find('serviceName').text
 		song['image'] = root.find('image').text
-	except AttributeError:
+	except AttributeError as error:
+		print(type(error).__name__, error)
 		#print(r.text)
 		continue
 
@@ -76,11 +84,15 @@ while True:
 		else:
 			url = 'http://%s:%d%s' % (myconfig.BLUOS_IP, myconfig.BLUOS_PORT, song['image'])
 		res = requests.get(url, stream = True)
+		#print(url)
 
 		if res.status_code == 200:
 			with open('cover.jpg','wb') as f:
 				shutil.copyfileobj(res.raw, f)
-			inkyconvert.convert('cover.jpg','converted.png')
+			if inkyconvert.convert('cover.jpg','converted.png') == 0:
+				imgpath = 'converted.png'
+			else:
+				imgpath = None
 		else:
 			print('Image could not be retrieved: $s' % url)
 

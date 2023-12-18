@@ -56,8 +56,9 @@ def display_song(cover, title1, title2, title3):
 	inky_display.v_flip = True
 
 	img = Image.new("P", (inky_display.WIDTH, inky_display.HEIGHT))
-	left = Image.open(cover)
-	img.paste(left)
+	if cover != None:
+		left = Image.open(cover)
+		img.paste(left)
 	draw = ImageDraw.Draw(img)
 
 	font = ImageFont.truetype(FredokaOne, 18)

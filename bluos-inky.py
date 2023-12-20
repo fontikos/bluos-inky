@@ -18,6 +18,7 @@ def clean_title(title):
 	title = re.sub(r'\(.*?Mix.*?\)','', title)
 	title = re.sub(r'\(.*?Edition.*?\)','', title)
 	title = re.sub(r'\(.*?Live.*?\)','', title)
+	title = re.sub(r'\(.*?Bonus.*?\)','', title)
 	title = title.strip()
 	return title
 

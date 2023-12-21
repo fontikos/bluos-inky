@@ -15,6 +15,7 @@ import shutil
 def clean_title(title):
 	if title == None: title = ''
 	title = re.sub(r'\(.*?Remaster.*?\)','', title)
+	title = re.sub(r'\[.*?Remaster.*?\]','', title)
 	title = re.sub(r'\(.*?Mix.*?\)','', title)
 	title = re.sub(r'\(.*?Edition.*?\)','', title)
 	title = re.sub(r'\(.*?Live.*?\)','', title)

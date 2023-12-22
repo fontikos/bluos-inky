@@ -20,6 +20,7 @@ def clean_title(title):
 	title = re.sub(r'\(.*?Edition.*?\)','', title)
 	title = re.sub(r'\(.*?Live.*?\)','', title)
 	title = re.sub(r'\(.*?Bonus.*?\)','', title)
+	title = re.sub(r'\(.*?bit.*?\)','', title)
 	title = title.strip()
 	return title
 
